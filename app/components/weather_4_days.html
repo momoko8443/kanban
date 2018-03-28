@@ -1,0 +1,32 @@
+<uku-component>
+    <template>
+        <div class="l-box sub-panel">
+            <div class="pure-g" uku-repeat="day in cc.myWeathers">
+                <div class="pure-u-1-3">
+                    <h3>{{day.date}}</h3>
+                </div>
+                <div class="pure-u-1-3">
+                    <span>{{day.weather}}</span>
+                </div>
+                <div class="pure-u-1-3">
+                    <span>{{day.temperature}}</span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+         (function () {
+            return function (uku) {
+                this.weather = {};
+                Object.defineProperty(this, "weathers", {
+                    set: function (value) {
+                        if (value) {
+                            value.shift();
+                            this.myWeathers = value;
+                        }
+                    }
+                })
+            };
+        })();
+    </script>
+</uku-component>

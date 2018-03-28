@@ -1,0 +1,30 @@
+.left-container{
+    background: #71d1c0;
+    height: 1050px;
+}
+.right-container{
+    background: white;
+    height: 1050px;
+}
+
+.real-data-panel{
+    height: 500px;
+    padding-left: 10px;
+}
+
+.sub-panel{
+    background: #C9FFE2;
+    color: white;
+    height: 300px;
+    margin: 5px;
+}
+
+.sub-panel>hr{
+    color: white;
+    height:1px;
+    border:none;
+    border-top:1px solid white;
+}
+.sub-panel h3{
+    color: #7E998A;
+}

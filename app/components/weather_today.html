@@ -1,0 +1,35 @@
+<uku-component>
+    <template>
+        <div class="l-box sub-panel">
+            <h3 class="information-head">今日天气</h3>
+            <hr>
+            <div class="pure-g">
+                <div class="pure-u-1">
+                    <!-- <img uku-src="cc.weather.dayPictureUrl">  -->
+                    <span class="pricing-table-price">
+                        {{cc.weather.temperature}}
+                    </span>
+                </div>
+                <div class="pure-u-1">
+                    <span>{{cc.weather.weather}}</span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        (function () {
+            return function (uku) {
+                this.weather = {};
+                Object.defineProperty(this, "city", {
+                    set: function (value) {
+                        if (value) {
+                            this.myCity = value;
+                            this.weather = this.myCity.weather_data[0];
+                            this.weather.temperature = this.weather.date.split("：")[1].split(")")[0];
+                        }
+                    }
+                })
+            };
+        })();
+    </script>
+</uku-component>

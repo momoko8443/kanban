@@ -1,0 +1,85 @@
+<uku-template>
+    <template>
+        <div class="pricing-table pricing-table-free">
+            <div style="padding-top:20px">
+                <img uku-src="cc.config.icon" style="width:50%">
+            </div>
+            <div class="pointContainer">
+                <div class="pointItem" uku-repeat="point in cc.points">
+                    <svg width="100%" height="100%">
+                        <circle cx="10" cy="10" r="10" uku-fill="point.color" />
+                    </svg>
+                </div>
+            </div>
+            <div class="pricing-table-header" uku-style="cc.bgcolorStyle">
+                <h2>{{cc.config.title}}</h2>
+                <span class="pricing-table-price">
+                    {{cc.percent + '%'}}
+                </span>
+            </div>
+            <!-- <button class="button-choose pure-button">Choose</button> -->
+        </div>
+    </template>
+    <style>
+        .pointContainer {
+            display: -webkit-flex;
+            /* Safari */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+            padding-top: 20px;
+        }
+
+        .pointItem {
+            width: 20%;
+            height: 20px;
+            padding-bottom: 2px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        (function () {
+            return function (uku) {
+                this.config = {};
+                this.points = [];
+                this.percent = 0;
+                this.bgcolorStyle = {};
+                var pointsNum = 50;
+                Object.defineProperty(this, 'itemConfig', {
+                    set: function (value) {
+                        if (value) {
+                            this.config = value;
+                            this.bgcolorStyle = {background: this.config.color};
+                            this.generatePoints();
+                        }
+                    },
+                });
+
+                Object.defineProperty(this, 'itemPercent', {
+                    set: function(value){
+                        if (value) {
+                            this.percent = value;
+                            this.generatePoints();
+                        }
+                    } 
+                });
+
+                this.generatePoints = function(){
+                    if(this.config && this.percent){
+                        var empty = Math.floor((100 - this.percent)/100 * pointsNum);
+                        //var occupy = pointsNum - empty;
+                        for (var i = 0; i < pointsNum; i++) {
+                            var color = i < empty ? this.config.color_gray : this.config.color;
+                            var item = { index: i, color: color};
+                            this.points.push(item);
+                        }
+                    }
+                }
+            }
+        })();
+    </script>
+</uku-template>
