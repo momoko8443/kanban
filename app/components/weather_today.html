@@ -1,35 +1,107 @@
 <uku-component>
     <template>
-        <div class="l-box sub-panel">
-            <h3 class="information-head">今日天气</h3>
-            <hr>
+        <div class="sub-panel" style="height:350px">
+            <span class="small-font">{{'中央气象台 ' + cc.weather.currentTime + ' 发布'}}</span>
             <div class="pure-g">
-                <div class="pure-u-1">
-                    <!-- <img uku-src="cc.weather.dayPictureUrl">  -->
-                    <span class="pricing-table-price">
-                        {{cc.weather.temperature}}
+                <div class="pure-u-1-3" style="height:80px">
+                    <span class="big-font">
+                        {{cc.weather.currentTemperature}}
                     </span>
                 </div>
-                <div class="pure-u-1">
-                    <span>{{cc.weather.weather}}</span>
+                <div class="pure-u-2-3">
+                    <div class="vbox" style="padding-top:20px">
+                        <div>
+                            <span class="medium-font">{{cc.weather.currentDay}}</span>
+                            <span class="medium-font">{{cc.weather.dayOfWeek}}</span>
+                        </div>
+                        <div>
+                            <span class="medium-font">{{cc.weather.cityName}}</span>
+                            <span>&#8226</span>
+                            <span class="medium-font">{{cc.weather.todayWeather}}</span>
+                            <span class="pm25" uku-style="cc.weather.pm25Style">{{cc.weather.pm25}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:0">
+                <ul>
+                    <li uku-repeat="tip in cc.weather.tips">
+                        <span class="small-font">{{tip.title + ' : ' + tip.des}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="pure-g">
+                <div class="pure-u-1-3 nextDayBox" uku-repeat="day in cc.weather.nextDays">
+                    <div class="vbox">
+                        <span>{{parent.cc.weekdayNameConvertor(day.date)}}</span>
+                        <span class="medium-font">{{day.weather}}</span>
+                        <span>{{day.temperature}}</span>
+                    </div>
                 </div>
             </div>
         </div>
     </template>
+    <style>
+        ul li {
+            list-style-type: none;
+        }
+    </style>
     <script>
-        (function () {
+        (function (mo) {
             return function (uku) {
                 this.weather = {};
+                var weekInChinese = ["星期日","星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
                 Object.defineProperty(this, "city", {
                     set: function (value) {
                         if (value) {
-                            this.myCity = value;
-                            this.weather = this.myCity.weather_data[0];
-                            this.weather.temperature = this.weather.date.split("：")[1].split(")")[0];
+                            var today = value.weather_data[0];
+                            this.weather.currentTime = mo().format("HH:mm");
+                            this.weather.currentTemperature = today.date.split("：")[1].split(")")[0];
+
+                            this.weather.currentDay = mo(value.date).format("YYYY-MM-DD");
+                            console.log('mo(value.date).weekday()', mo(value.date).weekday());
+                            this.weather.dayOfWeek = weekInChinese[mo(value.date).weekday()];
+                            this.weather.cityName = value.currentCity;
+                            this.weather.todayWeather = today.weather;
+                            this.weather.pm25 = "pm2.5 " + value.pm25 + pm25Level(value.pm25).level;
+                            this.weather.pm25Style = {
+                                background: pm25Level(value.pm25).color
+                            };
+
+                            this.weather.tips = value.index.slice(0, 3);
+
+                            this.weather.nextDays = value.weather_data.slice(1, 4);
+                            console.log(this.weather.nextDays);
                         }
                     }
-                })
+                });
+                this.weekdayNameConvertor = function(weekday){
+                    return weekday.replace("周","星期");
+                };
+                function pm25Level(pm25) {
+                    var result = {};
+                    if (pm25 <= 50) {
+                        result.level = "优";
+                        result.color = "#9BC53D";
+                    } else if (pm25 <= 100) {
+                        result.level = "良";
+                        result.color = "#F3C178";
+                    } else if (pm25 <= 150) {
+                        result.level = "轻度污染";
+                        result.color = "";
+                    } else if (pm25 <= 200) {
+                        result.level = "中度污染";
+                        result.color = "#F48042";
+                    } else if (pm25 <= 300) {
+                        result.level = "重度污染";
+                        result.color = "#EA1744";
+                    } else if (pm25 > 300) {
+                        result.level = "严重污染";
+                        result.color = "540D09";
+                    }
+                    return result;
+                }
             };
-        })();
+        })(moment);
     </script>
 </uku-component>

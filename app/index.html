@@ -12,45 +12,45 @@
     <title>Kanban</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="purecss/build/pure-min.css">
-    <link rel="stylesheet" href="purecss/build/grids-responsive-min.css">
-    <link rel="stylesheet" href="assets/css/pricing.css">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="purecss/build/pure-min.css">
+    <link rel="stylesheet" type="text/css" href="purecss/build/grids-responsive-min.css">
+    <link rel="stylesheet" type="text/css" href="swiper/dist/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/pricing.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 
 <body uku-application>
 
     <div class="pure-g">
         <div class="pure-u-1-2 left-container">
-            <div class="pure-g">
-                <div class="pure-u-1-2">
-                    <weather-today uku-city="appCtrl.city"></weather-today>
-                    <weather-4-days uku-weathers="appCtrl.weathers"></weather-4-days>
-                </div>
-                <div class="pure-u-1-2">
-                    <community-annoucement></community-annoucement>
-                    <community-activity></community-activity>
-                </div>
-            </div>
+            <weather-today uku-city="appCtrl.city"></weather-today>
+            <community-activity uku-activities="appCtrl.activities"></community-activity>
         </div>
         <div class="pure-u-1-2 right-container">
             <real-data class="real-data-panel"></real-data>
+            <community-annoucement></community-annoucement>
         </div>
     </div>
 </body>
+<script src="moment/min/moment.min.js"></script>
+<script src="swiper/dist/js/swiper.min.js"></script>
 <script src="ukulelejs/dist/uku.js"></script>
 <script src="services/weather_service.js"></script>
+<script src="services/realdata_service.js"></script>
+<script src="services/community_service.js"></script>
 <script>
     var uku = new Ukulele();
     var appCtrl = new ApplicationController(uku);
     var weatherService = new WeatherService();
+    var realDataService = new RealDataService();
+    var communityService = new CommunityService();
     uku.registerController('appCtrl', appCtrl);
     uku.registerComponent('real-data', 'components/real_data.html');
     uku.registerComponent('percent-item', 'components/percent_item.html');
-    uku.registerComponent('weather-today','components/weather_today.html');
-    uku.registerComponent('weather-4-days','components/weather_4_days.html');
-    uku.registerComponent('community-annoucement','components/community_annoucement.html');
-    uku.registerComponent('community-activity','components/community_activity.html');
+    uku.registerComponent('weather-today', 'components/weather_today.html');
+    uku.registerComponent('weather-4-days', 'components/weather_4_days.html');
+    uku.registerComponent('community-annoucement', 'components/community_annoucement.html');
+    uku.registerComponent('community-activity', 'components/community_activity.html');
     uku.init();
 
 
@@ -61,42 +61,62 @@
 
     function ApplicationController(uku) {
         var self = this;
-        this.init = function(){
-            weatherService.get().then(function(result){
+        this.init = function () {
+            weatherService.get().then(function (result) {
                 console.log(result);
                 self.city = result.results[0];
-                self.weathers = self.city.weather_data;
+                uku.refresh('appCtrl');
+            });
+            realDataService.get().then(function (result) {
+                var luxValue = parseInt(result.lux.split('lux')[0]);
+                if (luxValue > 100000) {
+                    luxValue = 100000;
+                }
+                self.percentLux = luxValue / 1000;
+                self.percentLux = Math.floor(self.percentLux);
+                if (self.percentLux < 1) {
+                    self.percentLux = 2;
+                }
+                self.configLux = {
+                    title: '日照强度',
+                    color: '#EE4B6A',
+                    color_gray: '#cccccc',
+                    unit: result.lux,
+                    icon: 'assets/images/sun.svg'
+                };
+                var soilHumidityValue = parseInt(result.soil.humidity.split('%')[0]);
+                self.percentSoilHumidity = soilHumidityValue;
+                self.configSoilHumidity = {
+                    title: '土壤湿度',
+                    color: '#17BEBB',
+                    color_gray: '#cccccc',
+                    unit: '%',
+                    icon: 'assets/images/water.svg'
+                };
+                var airHumidityValue = parseInt(result.air.humidity.split('%')[0]);
+                self.percentAirHumidity = airHumidityValue;
+                self.configAirHumidity = {
+                    title: '空气湿度',
+                    color: '#009DDC',
+                    color_gray: '#cccccc',
+                    unit: '%',
+                    icon: 'assets/images/drop.svg'
+                };
+                uku.refresh('appCtrl');
+            });
+            communityService.get().then(function (result) {
+                self.activities = result;
                 uku.refresh('appCtrl');
             });
         };
-        this.percent1 = 79;
-        this.config1 = {
-            title: '土壤',
-            color: '#CE8D66',
-            color_gray: '#cccccc',
-            icon: 'assets/images/plant.svg'
-        };
-        this.percent2 = 23;
-        this.config2 = {
-            title: '日照强度',
-            color: '#EE4B6A',
-            color_gray: '#cccccc',
-            icon: 'assets/images/sun.svg'
-        };
-        this.percent3 = 50;
-        this.config3 = {
-            title: '土壤湿度',
-            color: '#17BEBB',
-            color_gray: '#cccccc',
-            icon: 'assets/images/water.svg'
-        };
-        this.percent4 = 20;
-        this.config4 = {
-            title: '空气湿度',
-            color: '#009DDC',
-            color_gray: '#cccccc',
-            icon: 'assets/images/drop.svg'
-        };
+        // this.percent1 = 79;
+        // this.config1 = {
+        //     title: '土壤肥力',
+        //     color: '#CE8D66',
+        //     unit: '%',
+        //     color_gray: '#cccccc',
+        //     icon: 'assets/images/plant.svg'
+        // };
     }
 </script>
 

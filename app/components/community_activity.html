@@ -1,9 +1,45 @@
 <uku-componenet>
     <template>
-        <div class="l-box sub-panel">
+        <div class="l-box sub-panel" style="height:650px">
             <h3 class="information-head">社区活动</h3>
             <hr>
-            <p>xxxxxxxxxxxxxxxxxxxxx</p>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" uku-repeat="activity in cc.myActivities">
+                        <div class="vbox" style="width:100%;">
+                            <h4>{{activity.title}}</h4>
+                            <img uku-src="activity.pic" width="100%" height="400px">
+                        </div>    
+                    </div>
+                </div>
+            </div>
         </div>
     </template>
+    <script>
+        (function(SP){
+            return function(uku){
+
+                Object.defineProperty(this,"activities",{
+                    set: function(value){
+                        if(value){
+                            this.myActivities = value;
+
+                            setTimeout(function(){
+                                var mySwiper = new SP('.swiper-container', {
+                                    // Optional parameters
+                                    direction: 'horizontal',
+                                    autoplay: true,
+                                    loop: true,
+                                    navigation: {
+                                        nextEl: '.swiper-button-next',
+                                        prevEl: '.swiper-button-prev',
+                                    }
+                                });
+                            },2000);
+                        }
+                    }
+                })
+            }
+        })(Swiper);
+    </script>
 </uku-componenet>

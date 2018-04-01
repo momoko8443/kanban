@@ -1,0 +1,20 @@
+{
+    "realdata": {
+        "air": {
+            "humidity": "50%",
+            "temprature": "20℃"
+        },
+        "soil": {
+            "humidity": "50%"
+        },
+        "lux": "300lux"
+    },
+    "community":{
+        "activity":[
+            {"title":"100弄23号的李老伯正在田里忙碌","pic":"assets/images/community/01.jpg"},
+            {"title":"阳台种菜不是梦想","pic":"assets/images/community/02.jpg"},
+            {"title":"小伙子大学毕业，投身于社区种菜事业","pic":"assets/images/community/03.jpg"},
+            {"title":"小区绿意黯然，种菜绿化两不误","pic":"assets/images/community/04.jpg"}
+        ]
+    }
+}

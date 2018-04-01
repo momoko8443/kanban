@@ -1,20 +1,20 @@
 <uku-component>
     <template>
-        <h2>实时采集数据</h2>
-        <div class="pricing-tables pure-g">
-            <div class="pure-u-1 pure-u-md-1-4">
+        <h3>实时采集数据</h3>
+        <div class="pure-g">
+            <!-- <div class="pure-u-1 pure-u-md-1-3">
                 <percent-item uku-item-config="appCtrl.config1" uku-item-percent="appCtrl.percent1"></percent-item>
+            </div> -->
+
+            <div class="pure-u-1 pure-u-md-1-3">
+                <percent-item uku-item-config="appCtrl.configLux" uku-item-percent="appCtrl.percentLux"></percent-item>
             </div>
 
-            <div class="pure-u-1 pure-u-md-1-4">
-                <percent-item uku-item-config="appCtrl.config2" uku-item-percent="appCtrl.percent2"></percent-item>
+            <div class="pure-u-1 pure-u-md-1-3">
+                <percent-item uku-item-config="appCtrl.configSoilHumidity" uku-item-percent="appCtrl.percentSoilHumidity"></percent-item>
             </div>
-
-            <div class="pure-u-1 pure-u-md-1-4">
-                <percent-item uku-item-config="appCtrl.config3" uku-item-percent="appCtrl.percent3"></percent-item>
-            </div>
-            <div class="pure-u-1 pure-u-md-1-4">
-                <percent-item uku-item-config="appCtrl.config4" uku-item-percent="appCtrl.percent4"></percent-item>
+            <div class="pure-u-1 pure-u-md-1-3">
+                <percent-item uku-item-config="appCtrl.configAirHumidity" uku-item-percent="appCtrl.percentAirHumidity"></percent-item>
             </div>
         </div>
     </template>

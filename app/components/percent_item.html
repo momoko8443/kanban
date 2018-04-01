@@ -1,7 +1,7 @@
 <uku-template>
     <template>
-        <div class="pricing-table pricing-table-free">
-            <div style="padding-top:20px">
+        <div class="dataColumn">
+            <div class="dataColumn" style="padding-top:20px">
                 <img uku-src="cc.config.icon" style="width:50%">
             </div>
             <div class="pointContainer">
@@ -11,16 +11,27 @@
                     </svg>
                 </div>
             </div>
-            <div class="pricing-table-header" uku-style="cc.bgcolorStyle">
-                <h2>{{cc.config.title}}</h2>
-                <span class="pricing-table-price">
-                    {{cc.percent + '%'}}
+            <div class="dataColumn" uku-style="cc.bgcolorStyle">    
+                <span class="medium-font">
+                    {{ cc.config.title !== '日照强度'? cc.percent + cc.config.unit : cc.config.unit}}
                 </span>
+                <span>{{cc.config.title}}</span>
             </div>
             <!-- <button class="button-choose pure-button">Choose</button> -->
         </div>
     </template>
     <style>
+        .dataColumn{
+            display: -webkit-flex;
+            /* Safari */
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            align-content:center;
+        }
+
         .pointContainer {
             display: -webkit-flex;
             /* Safari */
@@ -30,7 +41,7 @@
             align-items: center;
             margin-left: auto;
             margin-right: auto;
-            width: 80%;
+            width: 60%;
             padding-top: 20px;
         }
 
@@ -53,7 +64,7 @@
                     set: function (value) {
                         if (value) {
                             this.config = value;
-                            this.bgcolorStyle = {background: this.config.color};
+                            this.bgcolorStyle = {color: this.config.color};
                             this.generatePoints();
                         }
                     },
