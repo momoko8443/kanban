@@ -1,7 +1,7 @@
 const express = require('express');
-const request = require('request');
+var request = require('request');
 const fs = require('fs');
-//const r = request.defaults({'proxy':'http://web-proxy.jpn.hp.com:8080'});
+request = request.defaults({'proxy':'http://web-proxy.jpn.hp.com:8080'});
 const app = express();
 
 app.use(express.static('app'));
