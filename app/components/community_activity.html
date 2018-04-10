@@ -6,9 +6,9 @@
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide" uku-repeat="activity in cc.myActivities">
-                        <div class="vbox" style="width:100%;">
+                        <div class="vbox picture-box" style="width:100%;">
                             <h4>{{activity.title}}</h4>
-                            <img uku-src="activity.pic" width="100%" height="400px">
+                            <img uku-src="activity.pic" width="100%" height="450px" uku-onclick="parent.cc.zoomImage(activity.pic)">
                         </div>    
                     </div>
                 </div>
@@ -16,9 +16,21 @@
         </div>
     </template>
     <script>
-        (function(SP){
+        (function(SP,ViewerJS){
             return function(uku){
-
+                this.zoomImage = function(e,src){
+                    var image = new Image();
+                    image.src = src;
+                    image.width = "1600px";
+                    image.height = "1000px";
+                    var viewer = new ViewerJS(image, {
+                        hidden: function () {
+                            viewer.destroy();
+                        },
+                        toolbar: 0
+                    });
+                    viewer.show();
+                };
                 Object.defineProperty(this,"activities",{
                     set: function(value){
                         if(value){
@@ -29,17 +41,13 @@
                                     // Optional parameters
                                     direction: 'horizontal',
                                     autoplay: true,
-                                    loop: true,
-                                    navigation: {
-                                        nextEl: '.swiper-button-next',
-                                        prevEl: '.swiper-button-prev',
-                                    }
+                                    loop: true
                                 });
                             },2000);
                         }
                     }
                 })
             }
-        })(Swiper);
+        })(Swiper,Viewer);
     </script>
 </uku-componenet>

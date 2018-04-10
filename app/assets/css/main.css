@@ -66,6 +66,26 @@
     color: #7E998A;
 }
 
+.sub-panel-right {
+    background: #cccccc;
+    color: white;
+    margin: 5px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sub-panel-right>hr {
+    color: white;
+    height: 1px;
+    border: none;
+    border-top: 1px solid white;
+}
+
+.sub-panel-right h3 {
+    color: #526066;
+}
+
+
 .small-font {
     font-size: .5rem;
 }
@@ -94,6 +114,11 @@
     justify-content: center;
     align-items: center;
     /*指定垂直居中*/
+}
+
+.picture-box{
+    margin-top:0;
+    margin-bottom: 50px;
 }
 
 .nextDayBox {
